@@ -26,7 +26,6 @@ public class CrashCatchHandler implements Thread.UncaughtExceptionHandler {
     private static final String LOG_DIR_NAME = "exception_log";
     public static String LOG_PATH;
     private Context mContext;
-    //存储设备信息和异常信息
     private Map<String, String> mInfoMap;
     private SimpleDateFormat mDateFormat;
 
@@ -53,10 +52,8 @@ public class CrashCatchHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        Toast.makeText(mContext, "抱歉, 程序出现异常, 即将退出.", Toast.LENGTH_LONG).show();
-        //收集设备参数信息
+        Toast.makeText(mContext, "Uncaught exception in update process.", Toast.LENGTH_LONG).show();
         collectDeviceInfo(mContext);
-        //保存日志文件至本地
         postService(saveCrashLog(e));
     }
 
