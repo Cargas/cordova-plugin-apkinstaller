@@ -47,10 +47,10 @@ public class Installer extends CordovaPlugin {
             callbackContext.error("invalid file.");
             return;
         }
-        if (!message.startsWith(Environment.getExternalStorageDirectory().toString())) {
+        /*if (!message.startsWith(Environment.getExternalStorageDirectory().toString())) {
             callbackContext.error("the input file is not in sdcard folder. \nmaybe access need permission.");
         }
-
+*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // API level 21 or higher, we need to use PackageInstaller
             
