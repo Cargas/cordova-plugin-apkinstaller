@@ -24,8 +24,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import android.util.Log;
+import android.app.Activity;
 
-import android.content.Context
+import android.content.Context;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -61,20 +62,21 @@ public class Installer extends CordovaPlugin {
             
             PackageInstaller.Session session = null;
             try {
-                Context context = this.cordova.getActivity().getApplicationContext();
+                Activity AppActivity = this.cordova.getActivity();
+                Context context = AppActivity.getApplicationContext();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
-                PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
-                        PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+                PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
                 int sessionId = packageInstaller.createSession(params);
                 session = packageInstaller.openSession(sessionId);
 
                 // Create an install status receiver.
                 addApkToInstallSession(context, message, session);
 
-                Intent intent = new Intent(context, this.cordova.getActivity().class);
+                Intent intent = new Intent(context, AppActivity.class);
                 intent.setAction(this.PACKAGE_INSTALLED_ACTION);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
                 IntentSender statusReceiver = PendingIntent.getIntentSender();
+
                 // Commit the session (this will start the installation workflow).
                 session.commit(statusReceiver);
                 
