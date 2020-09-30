@@ -75,7 +75,7 @@ public class Installer extends CordovaPlugin {
                 Intent intent = new Intent(context, AppActivity.getClass());
                 intent.setAction(this.PACKAGE_INSTALLED_ACTION);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                IntentSender statusReceiver = PendingIntent.getIntentSender();
+                IntentSender statusReceiver = pendingIntent.getIntentSender();
 
                 // Commit the session (this will start the installation workflow).
                 session.commit(statusReceiver);
