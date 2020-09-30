@@ -72,7 +72,7 @@ public class Installer extends CordovaPlugin {
                 // Create an install status receiver.
                 addApkToInstallSession(context, message, session);
 
-                Intent intent = new Intent(context, AppActivity.getLocalClassName());
+                Intent intent = new Intent(context, AppActivity.getClass());
                 intent.setAction(this.PACKAGE_INSTALLED_ACTION);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
                 IntentSender statusReceiver = PendingIntent.getIntentSender();
