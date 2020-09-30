@@ -22,12 +22,18 @@ import android.text.TextUtils;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.IOException;
 import android.util.Log;
+
+import android.content.Context
 
 /**
  * This class echoes a string called from JavaScript.
  */
 public class Installer extends CordovaPlugin {
+
+     private static final String PACKAGE_INSTALLED_ACTION =
+            "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED";
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -49,28 +55,24 @@ public class Installer extends CordovaPlugin {
             callbackContext.error("invalid file.");
             return;
         }
-        /*if (!message.startsWith(Environment.getExternalStorageDirectory().toString())) {
-            callbackContext.error("the input file is not in sdcard folder. \nmaybe access need permission.");
-        }
-*/
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // API level 21 or higher, we need to use PackageInstaller
             
             PackageInstaller.Session session = null;
             try {
-
-                PackageInstaller packageInstaller = MyAppActivity.getQtActivityInstance().getPackageManager().getPackageInstaller();
+                Context context = this.cordova.getActivity().getApplicationContext();
+                PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
                         PackageInstaller.SessionParams.MODE_FULL_INSTALL);
                 int sessionId = packageInstaller.createSession(params);
                 session = packageInstaller.openSession(sessionId);
 
                 // Create an install status receiver.
-                Context context = MyAppActivity.getQtActivityInstance().getApplicationContext();
-                addApkToInstallSession(context, filename, session);
+                addApkToInstallSession(context, message, session);
 
-                Intent intent = new Intent(context, MyAppActivity.class);
-                intent.setAction(MyAppActivity.PACKAGE_INSTALLED_ACTION);
+                Intent intent = new Intent(context, this.cordova.getActivity().class);
+                intent.setAction(this.PACKAGE_INSTALLED_ACTION);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
                 IntentSender statusReceiver = PendingIntent.getIntentSender();
                 // Commit the session (this will start the installation workflow).
