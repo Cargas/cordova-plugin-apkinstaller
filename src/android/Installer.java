@@ -51,11 +51,7 @@ public class Installer extends CordovaPlugin {
             callbackContext.error("need a file.");
             return;
         }
-        File apkFile = new File(message);
-        if (!apkFile.exists()) {
-            callbackContext.error("invalid file.");
-            return;
-        }
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // API level 21 or higher, we need to use PackageInstaller
@@ -90,6 +86,11 @@ public class Installer extends CordovaPlugin {
             }
 
         } else {
+            File apkFile = new File(message);
+            if (!apkFile.exists()) {
+                callbackContext.error("invalid file.");
+                return;
+            }
             Uri apkUri = Uri.fromFile(apkFile);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -120,7 +121,9 @@ public class Installer extends CordovaPlugin {
                 throw new IOException ("addApkToInstallSession");
             }
             packageInSession.close();  //need to close this stream
+            packageInSession.dispose();
             input.close();             //need to close this stream
+            input.dispose();
        }
        catch (Exception e) {
        }
