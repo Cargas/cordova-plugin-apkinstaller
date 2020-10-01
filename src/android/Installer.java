@@ -121,9 +121,7 @@ public class Installer extends CordovaPlugin {
                 throw new IOException ("addApkToInstallSession");
             }
             packageInSession.close();  //need to close this stream
-            packageInSession.dispose();
             input.close();             //need to close this stream
-            input.dispose();
        }
        catch (Exception e) {
        }
