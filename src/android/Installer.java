@@ -126,6 +126,7 @@ public class Installer extends CordovaPlugin {
             session.fsync(packageInSession);
             packageInSession.close();  //need to close this stream
             input.close();             //need to close this stream
+            System.gc();
        }
        catch (Exception e) {
        }
