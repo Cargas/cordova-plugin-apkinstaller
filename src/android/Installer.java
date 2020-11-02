@@ -119,8 +119,7 @@ public class Installer extends CordovaPlugin {
             }
             else {
                 session.fsync(packageInSession);
-                packageInSession.close();  //need to close this stream
-                input.close();  
+                packageInSession.close();  //need to close this stream 
                 throw new IOException ("addApkToInstallSession");
             }
             session.fsync(packageInSession);
