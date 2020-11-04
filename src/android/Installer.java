@@ -40,13 +40,13 @@ public class Installer extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("install")) {
             String message = args.getString(0);
-            this.install(message, packageName, callbackContext);
+            this.install(message, callbackContext);
             return true;
         }
         return false;
     }
 
-    private void install(String message, String packageName, CallbackContext callbackContext) {
+    private void install(String message, CallbackContext callbackContext) {
         if (TextUtils.isEmpty(message)) {
             callbackContext.error("need a file.");
             return;
@@ -68,7 +68,6 @@ public class Installer extends CordovaPlugin {
                 Context context = AppActivity.getApplicationContext();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-                patams.setPackageName(packageName);
                 int sessionId = packageInstaller.createSession(params);
                 session = packageInstaller.openSession(sessionId);
 
