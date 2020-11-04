@@ -101,7 +101,7 @@ public class Installer extends CordovaPlugin {
         }
     }
 
-    private static void addApkToInstallSession(Context context, String filename, PackageInstaller.Session session) throws IOException
+    private static void addApkToInstallSession(Context context, String filename, PackageInstaller.Session session) throws IOException, FileNotFoundException
     {
        // It's recommended to pass the file size to openWrite(). Otherwise installation may fail
        // if the disk is almost full.
