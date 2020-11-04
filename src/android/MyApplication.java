@@ -1,4 +1,4 @@
-package com.example.template;
+3package com.example.template;
 
 import android.app.Application;
 

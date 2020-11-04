@@ -40,13 +40,13 @@ public class Installer extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("install")) {
             String message = args.getString(0);
-            this.install(message, callbackContext);
+            this.install(message, packageName, callbackContext);
             return true;
         }
         return false;
     }
 
-    private void install(String message, CallbackContext callbackContext) {
+    private void install(String message, String packageName, CallbackContext callbackContext) {
         if (TextUtils.isEmpty(message)) {
             callbackContext.error("need a file.");
             return;
@@ -68,6 +68,7 @@ public class Installer extends CordovaPlugin {
                 Context context = AppActivity.getApplicationContext();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+                patams.setPackageName(packageName);
                 int sessionId = packageInstaller.createSession(params);
                 session = packageInstaller.openSession(sessionId);
 
@@ -105,30 +106,19 @@ public class Installer extends CordovaPlugin {
     {
        // It's recommended to pass the file size to openWrite(). Otherwise installation may fail
        // if the disk is almost full.
-       try {
-            OutputStream packageInSession = session.openWrite("package", 0, -1);
-            InputStream input;
-            Uri uri = Uri.parse(filename);
-            input = context.getContentResolver().openInputStream(uri);
+       try (OutputStream packageInSession = session.openWrite("package", 0, -1);
+            InputStream input = context.getContentResolver().openInputStream(Uri.parse(filename))) {
 
-            if(input != null) {
-               byte[] buffer = new byte[16384];
-               int n;
-               while ((n = input.read(buffer)) >= 0) {
-                   packageInSession.write(buffer, 0, n);
-               }
-            }
-            else {
-                session.fsync(packageInSession);
-                packageInSession.close();  //need to close this stream 
-                throw new IOException ("addApkToInstallSession");
-            }
-            session.fsync(packageInSession);
+           byte[] buffer = new byte[16384];
+           int n;
+           while ((n = input.read(buffer)) >= 0) {
+               packageInSession.write(buffer, 0, n);
+           }
+        }
+            /*session.fsync(packageInSession);
             packageInSession.close();  //need to close this stream
             input.close();             //need to close this stream
-            System.gc();
-       }
-       catch (Exception e) {
-       }
+            System.gc();*/
+       
    }
 }
