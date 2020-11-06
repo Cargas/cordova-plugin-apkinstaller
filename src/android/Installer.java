@@ -54,11 +54,11 @@ public class Installer extends CordovaPlugin {
         }
 
 
-        File apkFile = new File(message);
+        /*File apkFile = new File(message);
         if (!apkFile.exists()) {
             callbackContext.error("invalid file.");
             return;
-        }
+        }*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // API level 21 or higher, we need to use PackageInstaller
