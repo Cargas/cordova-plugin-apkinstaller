@@ -78,7 +78,7 @@ public class Installer extends CordovaPlugin {
 
                 // Commit the session (this will start the installation workflow).
                 session.commit(statusReceiver);
-                
+                callbackContext.success("launched installer!");
             } catch (IOException e) {
                 throw new RuntimeException("Couldn't install package" + e.getMessage(), e);
             } catch (RuntimeException e) {
