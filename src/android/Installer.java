@@ -53,9 +53,6 @@ public class Installer extends CordovaPlugin {
             return;
         }
 
-
-        
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // API level 21 or higher, we need to use PackageInstaller
             
@@ -65,6 +62,7 @@ public class Installer extends CordovaPlugin {
                 Context context = AppActivity.getApplicationContext();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+                params.setAppPackageName("com.cargassystems.delivery");
                 int sessionId = packageInstaller.createSession(params);
                 session = packageInstaller.openSession(sessionId);
 
