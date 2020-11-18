@@ -10,6 +10,8 @@ import android.os.Build;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +38,16 @@ public class Installer extends CordovaPlugin {
 
      private static final String PACKAGE_INSTALLED_ACTION =
             "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED";
+    private Activity AppActivity = null;
+
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+
+        Log.d(TAG, "initialize");
+
+        AppActivity = cordova.getActivity();
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -58,7 +70,6 @@ public class Installer extends CordovaPlugin {
             
             PackageInstaller.Session session = null;
             try {
-                Activity AppActivity = this.cordova.getActivity();
                 Context context = AppActivity.getApplicationContext();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
