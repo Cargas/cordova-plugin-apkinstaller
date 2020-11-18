@@ -30,6 +30,7 @@ import java.lang.SecurityException;
 import android.util.Log;
 import android.app.Activity;
 
+import android.widget.Toast;
 import android.content.Context;
 
 /**
@@ -69,6 +70,7 @@ public class Installer extends CordovaPlugin {
             PackageInstaller.Session session = null;
             try {
                 Context context = AppActivity.getApplicationContext();
+                Toast.makeText(context, "context created", Toast.LENGTH_SHORT).show();
                 PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
                 int sessionId = packageInstaller.createSession(params);
