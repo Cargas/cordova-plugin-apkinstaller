@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.lang.SecurityException;
 import android.util.Log;
 import android.app.Activity;
 
@@ -85,12 +86,20 @@ public class Installer extends CordovaPlugin {
                 session.commit(statusReceiver);
                 callbackContext.success("launched installer!");
             } catch (IOException e) {
-                throw new RuntimeException("Couldn't install package" + e.getMessage(), e);
+                if (session != null) {
+                    session.abandon();
+                }
+                throw new RuntimeException("Couldn't install package, IOException: " + e.getMessage(), e);
             } catch (RuntimeException e) {
                 if (session != null) {
                     session.abandon();
                 }
-                throw e;
+                throw new RuntimeException("Couldn't install package, Runtime Exception: " + e.getMessage(), e);
+            } catch (SecurityException e) {
+                if (session != null) {
+                    session.abandon();
+                }
+                throw new RuntimeException("Couldn't install package, Security Exception: " + e.getMessage(), e);
             }
 
         } else {
