@@ -43,9 +43,6 @@ public class Installer extends CordovaPlugin {
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-
-        Log.d(TAG, "initialize");
-
         AppActivity = cordova.getActivity();
     }
 
