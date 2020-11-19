@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.lang.SecurityException;
 import android.util.Log;
 import android.app.Activity;
+import android.os.Bundle;
 
 import android.widget.Toast;
 import android.content.Context;
@@ -138,4 +139,41 @@ public class Installer extends CordovaPlugin {
             System.gc();*/
        
    }
+
+   /**
+     * Triggered on new intent
+     *
+     * @param intent
+     */
+    @Override
+    public void onNewIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (PACKAGE_INSTALLED_ACTION.equals(intent.getAction())) {
+            int status = extras.getInt(PackageInstaller.EXTRA_STATUS);
+            String message = extras.getString(PackageInstaller.EXTRA_STATUS_MESSAGE);
+            switch (status) {
+                case PackageInstaller.STATUS_PENDING_USER_ACTION:
+                    // This test app isn't privileged, so the user has to confirm the install.
+                    Intent confirmIntent = (Intent) extras.get(Intent.EXTRA_INTENT);
+                    startActivity(confirmIntent);
+                    break;
+                case PackageInstaller.STATUS_SUCCESS:
+                    Toast.makeText(this, "Install succeeded!", Toast.LENGTH_SHORT).show();
+                    break;
+                case PackageInstaller.STATUS_FAILURE:
+                case PackageInstaller.STATUS_FAILURE_ABORTED:
+                case PackageInstaller.STATUS_FAILURE_BLOCKED:
+                case PackageInstaller.STATUS_FAILURE_CONFLICT:
+                case PackageInstaller.STATUS_FAILURE_INCOMPATIBLE:
+                case PackageInstaller.STATUS_FAILURE_INVALID:
+                case PackageInstaller.STATUS_FAILURE_STORAGE:
+                    Toast.makeText(this, "Install failed! " + status + ", " + message,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(this, "Unrecognized status received from installer: " + status,
+                            Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
