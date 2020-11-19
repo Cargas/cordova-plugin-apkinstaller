@@ -155,10 +155,10 @@ public class Installer extends CordovaPlugin {
                 case PackageInstaller.STATUS_PENDING_USER_ACTION:
                     // This test app isn't privileged, so the user has to confirm the install.
                     Intent confirmIntent = (Intent) extras.get(Intent.EXTRA_INTENT);
-                    startActivity(confirmIntent);
+                    AppActivity.startActivity(confirmIntent);
                     break;
                 case PackageInstaller.STATUS_SUCCESS:
-                    Toast.makeText(this, "Install succeeded!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppActivity.getApplicationContext(), "Install succeeded!", Toast.LENGTH_SHORT).show();
                     break;
                 case PackageInstaller.STATUS_FAILURE:
                 case PackageInstaller.STATUS_FAILURE_ABORTED:
@@ -167,11 +167,11 @@ public class Installer extends CordovaPlugin {
                 case PackageInstaller.STATUS_FAILURE_INCOMPATIBLE:
                 case PackageInstaller.STATUS_FAILURE_INVALID:
                 case PackageInstaller.STATUS_FAILURE_STORAGE:
-                    Toast.makeText(this, "Install failed! " + status + ", " + message,
+                    Toast.makeText(AppActivity.getApplicationContext(), "Install failed! " + status + ", " + message,
                             Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(this, "Unrecognized status received from installer: " + status,
+                    Toast.makeText(AppActivity.getApplicationContext(), "Unrecognized status received from installer: " + status,
                             Toast.LENGTH_SHORT).show();
             }
         }
